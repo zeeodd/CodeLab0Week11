@@ -7,12 +7,15 @@ public class ZiyadController : MonoBehaviour
 {
     RectTransform rt;
     private Vector2 startPos = new Vector2(0f, -50f);
-    public bool inPlace;
+    public bool inPlace = false;
+    public bool makeZiyadAttack = false;
+
+    private float shakeSpeed = 1.0f;
+    private float shakeAmount = 1.0f;
 
     void Awake()
     {
         rt = GetComponent<RectTransform>();
-        inPlace = false;
     }
 
     void Update()
@@ -20,6 +23,11 @@ public class ZiyadController : MonoBehaviour
         if (!inPlace)
         {
             Invoke("PopUp", 1.0f);
+        }
+
+        if(makeZiyadAttack)
+        {
+            Attack();
         }
     }
 
@@ -30,6 +38,12 @@ public class ZiyadController : MonoBehaviour
         {
             inPlace = true;
         }
+    }
+
+    void Attack()
+    {
+        var tempPos = rt.anchoredPosition;
+        rt.anchoredPosition = tempPos * Mathf.Cos(Time.time * shakeSpeed) * shakeAmount;
     }
 
 }
