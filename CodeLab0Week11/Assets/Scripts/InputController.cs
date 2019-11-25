@@ -5,18 +5,15 @@ using UnityEngine.UI;
 
 public class InputController : MonoBehaviour
 {
-    public bool gotSpell;
+    // Set up bool and string for spell grabbing
+    public bool gotSpell = false;
     public string spellName;
 
-    void Start()
-    {
-        gotSpell = false;
-    }
-
+    // This function is called when the player hits "Enter" after inputting a spell
     public void GetInput()
     {
+        // Grab the spell name and flip the gotSpell bool
         spellName = GetComponent<InputField>().text;
-        print(spellName);
         gotSpell = true;
     }
 }
