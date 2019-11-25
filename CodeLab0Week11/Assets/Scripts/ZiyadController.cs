@@ -7,11 +7,14 @@ public class ZiyadController : MonoBehaviour
 {
     RectTransform rt;
     private Vector2 startPos = new Vector2(0f, -50f);
+    private Vector2 deathPos = new Vector2(0f, -500f);
     public bool inPlace = false;
-    public bool makeZiyadAttack = false;
+    public bool attackZiyad = false;
+    public bool isDead = false;
 
     private float shakeSpeed = 1.0f;
     private float shakeAmount = 1.0f;
+    private float moveSpeed = 5.0f;
 
     void Awake()
     {
@@ -20,30 +23,36 @@ public class ZiyadController : MonoBehaviour
 
     void Update()
     {
-        if (!inPlace)
+        if (!inPlace && rt.anchoredPosition != startPos && !attackZiyad && !isDead)
         {
             Invoke("PopUp", 1.0f);
         }
 
-        if(makeZiyadAttack)
+        if (attackZiyad)
         {
-            Attack();
+            GetComponent<CameraShake>().enabled = true;
+            Invoke("Die", 2.0f);
         }
     }
 
     void PopUp()
     {
-        rt.anchoredPosition = Vector2.MoveTowards(rt.anchoredPosition, startPos, 5f);
+        rt.anchoredPosition = Vector2.MoveTowards(rt.anchoredPosition, startPos, moveSpeed);
         if (rt.anchoredPosition == startPos)
         {
             inPlace = true;
         }
     }
 
-    void Attack()
+    void Die()
     {
-        var tempPos = rt.anchoredPosition;
-        rt.anchoredPosition = tempPos * Mathf.Cos(Time.time * shakeSpeed) * shakeAmount;
+        attackZiyad = false;
+        GetComponent<CameraShake>().enabled = false;
+        rt.anchoredPosition = Vector2.MoveTowards(rt.anchoredPosition, deathPos, moveSpeed*1.5f);
+        if (rt.anchoredPosition == deathPos)
+        {
+            isDead = true;
+        }
     }
 
 }
